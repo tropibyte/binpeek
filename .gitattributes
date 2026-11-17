@@ -1,0 +1,28 @@
+# Normalize line endings in the repository; check out with the platform's default.
+* text=auto
+
+# Source and build files
+*.cpp text diff=cpp
+*.hpp text diff=cpp
+*.h text diff=cpp
+*.c text diff=cpp
+*.txt text
+*.md text diff=markdown
+*.json text
+*.yml text
+*.cmake text
+*.def text
+CMakeLists.txt text
+
+# Shell scripts must keep LF; Windows scripts keep CRLF.
+*.sh text eol=lf
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.ps1 text eol=crlf
+
+# Binary test fixtures: never convert line endings or diff as text.
+tests/data/*.elf -text -diff
+tests/data/*.o -text -diff
+tests/data/*.exe -text -diff
+tests/data/*.dll -text -diff
+tests/data/*.obj -text -diff

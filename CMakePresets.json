@@ -1,0 +1,61 @@
+{
+  "version": 3,
+  "configurePresets": [
+    {
+      "name": "dev",
+      "displayName": "Debug, warnings as errors",
+      "binaryDir": "${sourceDir}/build/dev",
+      "architecture": { "value": "x64", "strategy": "external" },
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "BINPEEK_WARNINGS_AS_ERRORS": "ON"
+      }
+    },
+    {
+      "name": "release",
+      "displayName": "Release",
+      "binaryDir": "${sourceDir}/build/release",
+      "architecture": { "value": "x64", "strategy": "external" },
+      "cacheVariables": { "CMAKE_BUILD_TYPE": "Release" }
+    },
+    {
+      "name": "asan",
+      "displayName": "Debug with AddressSanitizer and UBSan (GCC/Clang)",
+      "binaryDir": "${sourceDir}/build/asan",
+      "condition": { "type": "notEquals", "lhs": "${hostSystemName}", "rhs": "Windows" },
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "BINPEEK_SANITIZE": "ON",
+        "BINPEEK_WARNINGS_AS_ERRORS": "ON"
+      }
+    },
+    {
+      "name": "mingw",
+      "displayName": "Windows x64 cross build with MinGW-w64, tests run under Wine",
+      "binaryDir": "${sourceDir}/build/mingw",
+      "toolchainFile": "${sourceDir}/cmake/mingw-w64.cmake",
+      "condition": { "type": "equals", "lhs": "${hostSystemName}", "rhs": "Linux" },
+      "environment": {
+        "PATH": "/usr/lib/wine:$penv{PATH}",
+        "WINEDEBUG": "-all"
+      },
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "BINPEEK_WARNINGS_AS_ERRORS": "ON",
+        "CMAKE_CROSSCOMPILING_EMULATOR": "wine64"
+      }
+    }
+  ],
+  "buildPresets": [
+    { "name": "dev", "configurePreset": "dev", "configuration": "Debug" },
+    { "name": "release", "configurePreset": "release", "configuration": "Release" },
+    { "name": "asan", "configurePreset": "asan", "configuration": "Debug" },
+    { "name": "mingw", "configurePreset": "mingw", "configuration": "Debug" }
+  ],
+  "testPresets": [
+    { "name": "dev", "configurePreset": "dev", "configuration": "Debug", "output": { "outputOnFailure": true } },
+    { "name": "release", "configurePreset": "release", "configuration": "Release", "output": { "outputOnFailure": true } },
+    { "name": "asan", "configurePreset": "asan", "configuration": "Debug", "output": { "outputOnFailure": true } },
+    { "name": "mingw", "configurePreset": "mingw", "configuration": "Debug", "output": { "outputOnFailure": true } }
+  ]
+}

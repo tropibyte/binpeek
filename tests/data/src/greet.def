@@ -1,0 +1,6 @@
+LIBRARY greet.dll
+EXPORTS
+    add @1
+    greet @2
+    ExitNow = KERNEL32.ExitProcess @3
+    secret @7 NONAME
